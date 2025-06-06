@@ -9,61 +9,59 @@ type Props = {
   password: string;
 };
 
-const useLoginUser = ({ email, password }: Props) => {
+const useLoginUser = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [status, setStatus] = useState<AuthStatus | null>(null);
+  const [status, setStatus] = useState<AuthStatus | null>(
+    AuthStatus.unVerified
+  );
   const { signIn, setActive, isLoaded } = useSignIn();
   const [error, setError] = useState<null | string>(null);
   const [user, setUser] = useState<null | UserModel>(null);
 
-  useEffect(() => {
-    onSignInPress()
-      .then(() => {
-        if (status == null) setStatus(AuthStatus.Success);
-      })
-      .catch((error: string) => {
-        setError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
-  const onSignInPress = async () => {
+  const onSignInPress = async ({ email, password }: Props) => {
     if (!isLoaded) return;
-
+    //reset values
+    setIsLoading(true);
+    setError(null);
+    setStatus(null);
     // Start the sign-in process using the email and password provided
     try {
       const signInAttempt = await signIn.create({
         identifier: email,
-        password,
+        password: password,
       });
 
       // If sign-in process is complete, set the created session as active
       // and redirect the user
-      if (signInAttempt.id) {
-        if (signInAttempt.status === "complete") {
-          await setActive({ session: signInAttempt.createdSessionId });
-          const _user = await getUserFromDatabase(signInAttempt.id);
-          setUser(_user);
-        } else {
-          // If the status isn't complete, check why. User might need to
-          // complete further steps.
-          setError("An unknown error occured");
+      if (
+        signInAttempt.status === "complete" &&
+        signInAttempt.id != undefined
+      ) {
+        await setActive({ session: signInAttempt.createdSessionId });
+        const _user = await getUserFromDatabase(signInAttempt.id);
+        if (_user == null) {
+          setError("User not found in database");
           setStatus(AuthStatus.Error);
+          return;
         }
+        setUser(_user);
+        setStatus(AuthStatus.Success);
       } else {
-        setError("failed to get user from database");
+        // If the status isn't complete, check why. User might need to
+        // complete further steps.
+        setError("An unknown error occured");
         setStatus(AuthStatus.Error);
       }
-    } catch (err) {
+    } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      const errorMessage = JSON.stringify(err, null, 2);
+      const errorMessage = err?.errors?.[0]?.longMessage || "Unexpected error";
       setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
-  return { error, isLoading, status };
+  return { error, isLoading, status, onSignInPress, user };
 };
 
 export default useLoginUser;
