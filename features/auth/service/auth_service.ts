@@ -10,7 +10,7 @@ import {
   deleteDoc,
   updateDoc,
 } from "firebase/firestore";
-import { UserModel } from "@/constants/userModel";
+import { UserModel } from "@/@types/userModel";
 import { firestoreErrors } from "../data/authErrors";
 import { addPrefixToKeys } from "@/utils/prefixToKey";
 const addUserToDatabase = async (user: UserModel) => {
@@ -61,23 +61,29 @@ const deleteUserFromDatabase = async (user_id: string) => {
     const message = firestoreErrors[e.code];
     throw new Error();
   }
+};
+const updateUserFromDatabase = async (
+  user_id: string,
+  updatedUser: UserModel
+) => {
+  try {
+    // get user from database
+    const docRef: DocumentReference<DocumentData, DocumentData> = doc(
+      db,
+      "users",
+      user_id
+    );
+    // firebase expects user. as prefix when updating values
+    await updateDoc(docRef, addPrefixToKeys("user", updatedUser));
+  } catch (error: any) {
+    const message = firestoreErrors[error.code];
+    throw new Error(message);
+  }
+};
 
-  const updateUserFromDatabase = async (
-    user_id: string,
-    updatedUser: UserModel
-  ) => {
-    try {
-      // get user from database
-      const docRef: DocumentReference<DocumentData, DocumentData> = doc(
-        db,
-        "users",
-        user_id
-      );
-      // firebase expects user. as prefix when updating values
-      await updateDoc(docRef, addPrefixToKeys("user", updatedUser));
-    } catch (error: any) {
-      const message = firestoreErrors[error.code];
-      throw new Error(message);
-    }
-  };
+export {
+  addUserToDatabase,
+  updateUserFromDatabase,
+  deleteUserFromDatabase,
+  getUserFromDatabase,
 };
