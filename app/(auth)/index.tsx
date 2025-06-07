@@ -36,6 +36,12 @@ const LoginScreen = () => {
           loginUser();
         }}
       />
+      <Button
+        title="register"
+        onPress={() => {
+          router.push("/(auth)/register");
+        }}
+      />
     </SafeAreaView>
   );
 };

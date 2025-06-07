@@ -12,31 +12,17 @@ type Props = {
   password: string;
 };
 
-const useRegisterUser = ({ userdata, password }: Props) => {
-  const [isLoading, setIsLoading] = useState(true);
+const useRegisterUser = () => {
   const [status, setStatus] = useState<AuthStatus | null>(null);
-  const [user, setUser] = useState<null | UserModel>(null);
   const [pendingVerification, setPendingVerification] = useState(false);
+  const [userdata, setUserData] = useState<UserModel | null>(null);
 
   const { isLoaded, signUp, setActive } = useSignUp();
 
   const [error, setError] = useState<null | string>(null);
 
-  //   useEffect(() => {
-  //     onSignInPress()
-  //       .then(() => {
-  //         if (status == null) setStatus(AuthStatus.Success);
-  //       })
-  //       .catch((error: string) => {
-  //         setError(error);
-  //       })
-  //       .finally(() => {
-  //         setIsLoading(false);
-  //       });
-  //   }, []);
-  // Handle submission of sign-up form
-
-  const onSignUpPress = async () => {
+  const onSignUpPress = async ({ userdata, password }: Props) => {
+    setUserData(userdata);
     if (!isLoaded) return;
 
     // Start sign-up process using email and password provided
@@ -71,7 +57,7 @@ const useRegisterUser = ({ userdata, password }: Props) => {
 
       // If verification was completed, set the session to active
       // and redirect the user
-      if (signUpAttempt.id) {
+      if (signUpAttempt.id && userdata) {
         if (signUpAttempt.status === "complete") {
           await setActive({ session: signUpAttempt.createdSessionId });
           await addUserToDatabase(userdata);
@@ -90,7 +76,7 @@ const useRegisterUser = ({ userdata, password }: Props) => {
     }
   };
 
-  return { error, isLoading, status, onVerifyPress, onSignUpPress };
+  return { error, status, onVerifyPress, onSignUpPress, pendingVerification };
 };
 
 export default useRegisterUser;
