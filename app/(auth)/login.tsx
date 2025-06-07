@@ -65,7 +65,11 @@ const LoginScreen = () => {
       </View>
       <View style={styles.footer}>
         <ThemeText>Don't have an account? </ThemeText>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/(auth)/register");
+          }}
+        >
           <ThemeText style={styles.registerText}>Register Now</ThemeText>
         </TouchableOpacity>
       </View>
