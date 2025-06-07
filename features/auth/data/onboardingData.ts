@@ -2,26 +2,27 @@ import { images } from "@/constants/statics";
 
 const imagesBaseURL = "../../../assets/images";
 
-export const onboardingData = [
-  // onboarding process data
+const onboardingData = [
   {
-    imageurl: imagesBaseURL + images.worldIcon,
-    desc: "Find projects from companies everywhere in the word",
+    imageurl: images.worldIcon,
+    desc: "Find projects from companies everywhere in the world",
   },
   {
-    imageurl: imagesBaseURL + images.cashIcon,
+    imageurl: images.cashIcon,
     desc: "Make money while working on awesome projects",
   },
   {
-    imageurl: imagesBaseURL + images.chatsIcon,
-    desc: "Chat with others freelancers and develop your network",
+    imageurl: images.chatsIcon,
+    desc: "Chat with other freelancers and develop your network",
   },
   {
-    imageurl: imagesBaseURL + images.levelUp,
+    imageurl: images.levelUp,
     desc: "Work hard and level up!",
   },
   {
-    imageurl: imagesBaseURL + images.heartIcon,
-    desc: "Enjoy your progess!",
+    imageurl: images.heartIcon,
+    desc: "Enjoy your progress!",
   },
 ];
+
+export { onboardingData };

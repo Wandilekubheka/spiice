@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import useLoginUser from "@/features/auth/hooks/useLoginUser";
 import { AuthStatus } from "@/@types/authStatus";
 import { router } from "expo-router";
+import BackgroundView from "@/features/auth/components/backgroundView";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +24,7 @@ const LoginScreen = () => {
     await onSignInPress({ email, password });
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <BackgroundView>
       <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
       <TextInput
         placeholder="Password"
@@ -48,7 +49,7 @@ const LoginScreen = () => {
           router.push("/(auth)/forgotPass");
         }}
       />
-    </SafeAreaView>
+    </BackgroundView>
   );
 };
 
