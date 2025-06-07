@@ -1,6 +1,4 @@
-import { images } from "@/constants/statics";
-
-const imagesBaseURL = "../../../assets/images";
+import { images } from "@/assets";
 
 const onboardingData = [
   {
