@@ -2,11 +2,11 @@ import { Alert, Button, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
 type Props = {
-  verify: (code: string) => Promise<void>;
+  action: (code: string) => Promise<void>;
   error: string | null;
 };
 
-const EntercodeScreen = ({ verify, error }: Props) => {
+const EntercodeScreen = ({ action, error }: Props) => {
   const [code, setCode] = useState("");
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const EntercodeScreen = ({ verify, error }: Props) => {
     <View>
       <Button
         onPress={async () => {
-          await verify(code);
+          await action(code);
         }}
         title="submit"
       />

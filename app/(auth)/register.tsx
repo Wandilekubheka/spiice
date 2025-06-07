@@ -30,7 +30,7 @@ function RegisterScreen({}: Props) {
   }, [status]);
 
   if (pendingVerification) {
-    return <EntercodeScreen verify={onVerifyPress} error={error} />;
+    return <EntercodeScreen action={onVerifyPress} error={error} />;
   }
 
   return (

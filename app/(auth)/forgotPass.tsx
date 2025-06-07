@@ -14,6 +14,8 @@ const ForgotPassScreen = () => {
     if (status === AuthStatus.Error) {
       Alert.alert(error);
     } else if (status === AuthStatus.Success) {
+      console.log(status);
+
       Alert.alert("password reset successfully");
       // move you back to login screen
       router.replace("/(auth)");
@@ -25,11 +27,7 @@ const ForgotPassScreen = () => {
     return (
       <View style={styles.container}>
         <TextInput placeholder="Code" value={code} onChangeText={setCode} />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-        />
+
         <Button
           title="submit"
           onPress={async () => {
@@ -42,9 +40,18 @@ const ForgotPassScreen = () => {
   return (
     <View style={styles.container}>
       <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
+      <TextInput
+        placeholder="password"
+        value={password}
+        onChangeText={setPassword}
+      />
       <Button
         title="submit"
         onPress={async () => {
+          if (password === "") {
+            Alert.alert("enter password");
+            return;
+          }
           await sendPassReset(email);
         }}
       />

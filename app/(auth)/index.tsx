@@ -42,6 +42,12 @@ const LoginScreen = () => {
           router.push("/(auth)/register");
         }}
       />
+      <Button
+        title="forgotpass"
+        onPress={() => {
+          router.push("/(auth)/forgotPass");
+        }}
+      />
     </SafeAreaView>
   );
 };

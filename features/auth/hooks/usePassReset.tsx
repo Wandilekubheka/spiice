@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
-import { useSignIn } from "@clerk/clerk-expo";
+import { useAuth, useSignIn } from "@clerk/clerk-expo";
 import { AuthStatus } from "@/@types/authStatus";
 
 const usePassReset = () => {
   const { isLoaded, signIn, setActive } = useSignIn();
+  const { signOut, isSignedIn } = useAuth();
   const [status, setStatus] = useState<AuthStatus | null>(null);
   const [error, setError] = useState("");
 
@@ -38,17 +39,21 @@ const usePassReset = () => {
         password,
       })
       .then((result) => {
+        if (isSignedIn) {
+          signOut();
+        }
         // Check if 2FA is required
         if (result.status === "needs_second_factor") {
-          setError("");
+          setStatus(AuthStatus.Success);
         } else if (result.status === "complete") {
           setStatus(AuthStatus.Success);
         } else {
           setStatus(AuthStatus.Error);
-          console.log(result);
+          setError("something ");
         }
       })
       .catch((err) => {
+        console.error(JSON.stringify(err, null, 2));
         setStatus(AuthStatus.Error);
         setError(err.errors[0].longMessage);
       });
