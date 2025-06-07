@@ -1,19 +1,12 @@
-import {
-  Image,
-  ImageSourcePropType,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import BackgroundView from "@/features/auth/components/backgroundView";
 import { onboardingData } from "@/features/auth/data/onboardingData";
 import { ThemeText } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
+import { router } from "expo-router";
 
-type Props = {};
-
-const OnboardingScreen = (props: Props) => {
+const OnboardingScreen = () => {
   const [active, setActive] = useState(3);
   const imagepath: any = onboardingData[active].imageurl;
 
@@ -25,7 +18,12 @@ const OnboardingScreen = (props: Props) => {
         <ThemeText style={{ textAlign: "center", fontSize: 18 }}>
           {onboardingData[active].desc}
         </ThemeText>
-        <View style={styles.processContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            router.replace("/(auth)/login");
+          }}
+          style={styles.processContainer}
+        >
           {onboardingData.map((item, index) => (
             <View
               key={index}
@@ -38,9 +36,9 @@ const OnboardingScreen = (props: Props) => {
                       : Colors.light.tabIconDefault,
                 },
               ]}
-            ></View>
+            />
           ))}
-        </View>
+        </TouchableOpacity>
       </View>
     </BackgroundView>
   );

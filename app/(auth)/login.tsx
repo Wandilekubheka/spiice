@@ -1,10 +1,21 @@
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useLoginUser from "@/features/auth/hooks/useLoginUser";
 import { AuthStatus } from "@/@types/authStatus";
 import { router } from "expo-router";
-import BackgroundView from "@/features/auth/components/backgroundView";
+import { ThemeText } from "@/components/StyledText";
+import StylesInput from "@/components/StylesInput";
+import Colors from "@/constants/Colors";
+import StyledButton from "@/components/styledButton";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,32 +35,41 @@ const LoginScreen = () => {
     await onSignInPress({ email, password });
   };
   return (
-    <BackgroundView>
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-      />
-      <Button
-        title="login"
-        onPress={() => {
-          loginUser();
-        }}
-      />
-      <Button
-        title="register"
-        onPress={() => {
-          router.push("/(auth)/register");
-        }}
-      />
-      <Button
-        title="forgotpass"
-        onPress={() => {
-          router.push("/(auth)/forgotPass");
-        }}
-      />
-    </BackgroundView>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.form}>
+        <ThemeText
+          style={{
+            fontFamily: "RedHatDisplayBB",
+            fontWeight: "bold",
+            fontSize: 27,
+            marginBottom: 10,
+            color: "black",
+            marginRight: 50,
+          }}
+        >
+          Welcome back! Glad to see you again!
+        </ThemeText>
+        <StylesInput
+          callback={(text) => setEmail(text)}
+          placeholder="Enter your email"
+        />
+        <StylesInput
+          callback={(text) => setPassword(text)}
+          placeholder="Enter your password"
+          secure
+        />
+        <TouchableOpacity style={styles.forgotPass}>
+          <ThemeText>Forgot Password?</ThemeText>
+        </TouchableOpacity>
+        <StyledButton title="LOGIN" />
+      </View>
+      <View style={styles.footer}>
+        <ThemeText>Don't have an account? </ThemeText>
+        <TouchableOpacity>
+          <ThemeText style={styles.registerText}>Register Now</ThemeText>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -57,7 +77,21 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    padding: 20,
+  },
+  form: {
+    flex: 1,
+    gap: 20,
     justifyContent: "center",
+  },
+  forgotPass: {
+    alignSelf: "flex-end",
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  registerText: {
+    color: Colors.light.tint,
   },
 });
