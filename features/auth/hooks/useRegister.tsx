@@ -1,12 +1,10 @@
 import { AuthStatus } from "@/@types/authStatus";
 import { UserModel } from "@/@types/userModel";
-import { useAuth, useSignIn, useSignUp } from "@clerk/clerk-expo";
-import { useEffect, useState } from "react";
-import {
-  addUserToDatabase,
-  getUserFromDatabase,
-} from "../service/auth_service";
-
+import { useSignUp } from "@clerk/clerk-expo";
+import { useState } from "react";
+import { addUserToDatabase } from "../service/auth_service";
+import { formValidator } from "@/utils/formValidator";
+import { CreateUserProps } from "@/@types/registerProps";
 type Props = {
   userdata: UserModel;
   password: string;
@@ -14,22 +12,28 @@ type Props = {
 
 const useRegisterUser = () => {
   const [status, setStatus] = useState<AuthStatus | null>(null);
-  const [pendingVerification, setPendingVerification] = useState(false);
-  const [userdata, setUserData] = useState<UserModel | null>(null);
+  const [userdata, setUserData] = useState<CreateUserProps | null>(null);
 
   const { isLoaded, signUp, setActive } = useSignUp();
 
   const [error, setError] = useState<null | string>(null);
 
-  const onSignUpPress = async ({ userdata, password }: Props) => {
-    setUserData(userdata);
+  const onSignUpPress = async (props: CreateUserProps) => {
+    const formErrors = formValidator(props);
+
+    if (formErrors != null) {
+      setError(formErrors);
+      setStatus(AuthStatus.Error);
+      return;
+    }
+
     if (!isLoaded) return;
 
     // Start sign-up process using email and password provided
     try {
       await signUp.create({
-        username: userdata.email,
-        password,
+        emailAddress: props.email,
+        password: props.password,
       });
 
       // Send user an email with verification code
@@ -37,11 +41,14 @@ const useRegisterUser = () => {
 
       // Set 'pendingVerification' to true to display second form
       // and capture OTP code
-      setPendingVerification(true);
-    } catch (err) {
+      setError(null);
+      setUserData(props);
+      setStatus(AuthStatus.TwoStepRequired);
+    } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      setError(JSON.stringify(err, null, 2));
+      const errorMessage = err?.errors?.[0]?.longMessage || "Unexpected error";
+      setError(errorMessage);
     }
   };
 
@@ -57,26 +64,36 @@ const useRegisterUser = () => {
 
       // If verification was completed, set the session to active
       // and redirect the user
+
       if (signUpAttempt.id && userdata) {
         if (signUpAttempt.status === "complete") {
           await setActive({ session: signUpAttempt.createdSessionId });
-          await addUserToDatabase(userdata);
+          const user: UserModel = {
+            uid: signUpAttempt.createdUserId!,
+            email: signUpAttempt.emailAddress!,
+            createdAt: new Date(),
+            displayName: `${userdata.name} ${userdata.surname}`,
+          };
+          await addUserToDatabase(user);
+          // await addUserToDatabase(userdata);
         } else {
           // If the status is not complete, check why. User may need to
           // complete further steps.
-          console.error(JSON.stringify(signUpAttempt, null, 2));
+
+          setError("Unknown error occur");
         }
       } else {
-        setError("im here");
+        setError("Unknown error occur");
       }
-    } catch (err) {
+    } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      console.error(JSON.stringify(err, null, 2));
+      const errorMessage = err?.errors?.[0]?.longMessage || err;
+      setError(errorMessage);
     }
   };
 
-  return { error, status, onVerifyPress, onSignUpPress, pendingVerification };
+  return { error, status, onVerifyPress, onSignUpPress };
 };
 
 export default useRegisterUser;

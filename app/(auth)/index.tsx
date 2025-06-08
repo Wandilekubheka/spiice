@@ -1,62 +1,68 @@
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import useLoginUser from "@/features/auth/hooks/useLoginUser";
-import { AuthStatus } from "@/@types/authStatus";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import BackgroundView from "@/features/auth/components/backgroundView";
+import { onboardingData } from "@/features/auth/data/onboardingData";
+import { ThemeText } from "@/components/StyledText";
+import Colors from "@/constants/Colors";
 import { router } from "expo-router";
-const LoginScreen = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { error, isLoading, status, onSignInPress } = useLoginUser();
-  useEffect(() => {
-    if (status === AuthStatus.Success) {
-      router.replace("/");
-    }
-  }, [status]);
 
-  useEffect(() => {
-    if (error) {
-      Alert.alert("Login Failed", error);
-    }
-  }, [error]);
-  const loginUser = async () => {
-    await onSignInPress({ email, password });
-  };
+const OnboardingScreen = () => {
+  const [active, setActive] = useState(3);
+  const imagepath: any = onboardingData[active].imageurl;
+
   return (
-    <SafeAreaView style={styles.container}>
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-      />
-      <Button
-        title="login"
-        onPress={() => {
-          loginUser();
-        }}
-      />
-      <Button
-        title="register"
-        onPress={() => {
-          router.push("/(auth)/register");
-        }}
-      />
-      <Button
-        title="forgotpass"
-        onPress={() => {
-          router.push("/(auth)/forgotPass");
-        }}
-      />
-    </SafeAreaView>
+    <BackgroundView>
+      <Image style={styles.image} source={imagepath} />
+      {/* Bottom content */}
+      <View style={styles.footerContainer}>
+        <ThemeText style={{ textAlign: "center", fontSize: 18 }}>
+          {onboardingData[active].desc}
+        </ThemeText>
+        <TouchableOpacity
+          onPress={() => {
+            router.replace("/(auth)/login");
+          }}
+          style={styles.processContainer}
+        >
+          {onboardingData.map((item, index) => (
+            <View
+              key={index}
+              style={[
+                styles.progressItem,
+                {
+                  backgroundColor:
+                    index == active
+                      ? Colors.light.tint
+                      : Colors.light.tabIconDefault,
+                },
+              ]}
+            />
+          ))}
+        </TouchableOpacity>
+      </View>
+    </BackgroundView>
   );
 };
 
-export default LoginScreen;
+export default OnboardingScreen;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  image: {
+    width: 200,
+    aspectRatio: 1,
+  },
+  footerContainer: {
+    width: "70%",
     alignItems: "center",
-    justifyContent: "center",
+    gap: 20,
+  },
+  processContainer: {
+    flexDirection: "row",
+    gap: 5,
+  },
+  progressItem: {
+    width: 10,
+    height: 10,
+    backgroundColor: "red",
+    borderRadius: 99,
   },
 });

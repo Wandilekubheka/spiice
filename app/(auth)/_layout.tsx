@@ -1,4 +1,3 @@
-import { UserModel } from "@/@types/userModel";
 import { useAuth } from "@clerk/clerk-expo";
 import { Redirect, Slot } from "expo-router";
 const AuthLayout = () => {
@@ -7,7 +6,7 @@ const AuthLayout = () => {
   const isUser = true;
 
   if (isSignedIn && isUser) {
-    return <Redirect href={"/(auth)"} />;
+    return <Redirect href={"/(app)/home"} />;
   }
   return <Slot />;
 };
