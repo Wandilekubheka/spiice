@@ -5,11 +5,12 @@ import Colors from "@/constants/Colors";
 
 type Props = {
   title: string;
+  onPress: () => void;
 };
 
-const StyledButton = ({ title }: Props) => {
+const StyledButton = ({ title, onPress }: Props) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <ThemeText style={styles.title}>{title}</ThemeText>
     </TouchableOpacity>
   );

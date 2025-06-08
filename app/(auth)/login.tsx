@@ -58,10 +58,15 @@ const LoginScreen = () => {
           placeholder="Enter your password"
           secure
         />
-        <TouchableOpacity style={styles.forgotPass}>
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/(auth)/forgotPass");
+          }}
+          style={styles.forgotPass}
+        >
           <ThemeText>Forgot Password?</ThemeText>
         </TouchableOpacity>
-        <StyledButton title="LOGIN" />
+        <StyledButton onPress={loginUser} title="LOGIN" />
       </View>
       <View style={styles.footer}>
         <ThemeText>Don't have an account? </ThemeText>

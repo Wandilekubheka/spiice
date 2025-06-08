@@ -11,6 +11,8 @@ import Colors from "@/constants/Colors";
 import { ThemeText } from "@/components/StyledText";
 import StyledButton from "@/components/styledButton";
 import StylesInput from "@/components/StylesInput";
+import { UserModel } from "@/@types/userModel";
+import { CreateUserProps } from "@/@types/registerProps";
 
 type Props = {};
 
@@ -19,8 +21,7 @@ function RegisterScreen({}: Props) {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const { error, status, onVerifyPress, pendingVerification } =
-    useRegisterUser();
+  const { error, status, onVerifyPress, onSignUpPress } = useRegisterUser();
   useEffect(() => {
     if (error != null) {
       Alert.alert(error);
@@ -28,14 +29,28 @@ function RegisterScreen({}: Props) {
   }, [error]);
 
   useEffect(() => {
+    console.log(status);
+
     if (status === AuthStatus.Success) {
       router.replace("/(app)/home");
     }
   }, [status]);
 
-  if (pendingVerification) {
-    return <EntercodeScreen action={onVerifyPress} error={error} />;
+  if (status === AuthStatus.TwoStepRequired) {
+    return (
+      <EntercodeScreen action={onVerifyPress} status={status} error={error} />
+    );
   }
+
+  const registerUser = async () => {
+    const userdata: CreateUserProps = {
+      name: firstName,
+      surname: lastName,
+      email: email,
+      password: password,
+    };
+    await onSignUpPress(userdata);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,8 +70,8 @@ function RegisterScreen({}: Props) {
         <StylesInput placeholder="first name" callback={setFirstName} />
         <StylesInput placeholder="last name" callback={setLastName} />
         <StylesInput placeholder="Email" callback={setEmail} />
-        <StylesInput placeholder="password" callback={setPassword} />
-        <StyledButton title="Register" />
+        <StylesInput secure placeholder="password" callback={setPassword} />
+        <StyledButton onPress={registerUser} title="Register" />
       </View>
       <View style={styles.footer}>
         <ThemeText>Already have an account? </ThemeText>
