@@ -12,7 +12,7 @@ type Props = {
 
 const useRegisterUser = () => {
   const [status, setStatus] = useState<AuthStatus | null>(null);
-  const [userdata, setUserData] = useState<UserModel | null>(null);
+  const [userdata, setUserData] = useState<CreateUserProps | null>(null);
 
   const { isLoaded, signUp, setActive } = useSignUp();
 
@@ -42,6 +42,7 @@ const useRegisterUser = () => {
       // Set 'pendingVerification' to true to display second form
       // and capture OTP code
       setError(null);
+      setUserData(props);
       setStatus(AuthStatus.TwoStepRequired);
     } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
@@ -57,32 +58,37 @@ const useRegisterUser = () => {
 
     try {
       // Use the code the user provided to attempt verification
-      const signUpAttempt: any = await signUp.attemptEmailAddressVerification({
+      const signUpAttempt = await signUp.attemptEmailAddressVerification({
         code,
       });
 
       // If verification was completed, set the session to active
       // and redirect the user
 
-      if (signUpAttempt.id) {
+      if (signUpAttempt.id && userdata) {
         if (signUpAttempt.status === "complete") {
           await setActive({ session: signUpAttempt.createdSessionId });
+          const user: UserModel = {
+            uid: signUpAttempt.createdUserId!,
+            email: signUpAttempt.emailAddress!,
+            createdAt: new Date(),
+            displayName: `${userdata.name} ${userdata.surname}`,
+          };
+          await addUserToDatabase(user);
           // await addUserToDatabase(userdata);
         } else {
           // If the status is not complete, check why. User may need to
           // complete further steps.
-          const errorMessage =
-            signUpAttempt?.errors?.[0]?.longMessage || "Unexpected error";
-          setError(errorMessage);
-          console.error(JSON.stringify(signUpAttempt, null, 2));
+
+          setError("Unknown error occur");
         }
       } else {
-        setError("im here");
+        setError("Unknown error occur");
       }
     } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      const errorMessage = err?.errors?.[0]?.longMessage || "Unexpected error";
+      const errorMessage = err?.errors?.[0]?.longMessage || err;
       setError(errorMessage);
     }
   };
