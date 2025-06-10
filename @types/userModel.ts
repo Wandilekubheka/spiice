@@ -6,4 +6,13 @@ export interface UserModel {
   email: string;
   photoURL?: string;
   createdAt: Timestamp | Date | string;
+  totalGain: number;
+  totalProject: number;
+  totalRequests: number;
+  totalReviews: number;
+  chatsID?: string;
+  desc: string;
+  jobTitle: string;
+  reviewCount: number;
+  rating: number;
 }

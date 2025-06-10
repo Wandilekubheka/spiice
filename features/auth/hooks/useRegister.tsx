@@ -73,6 +73,14 @@ const useRegisterUser = () => {
             email: signUpAttempt.emailAddress!,
             createdAt: new Date(),
             displayName: `${userdata.name} ${userdata.surname}`,
+            totalGain: 0,
+            totalProject: 0,
+            totalRequests: 0,
+            totalReviews: 0,
+            desc: "",
+            jobTitle: "",
+            reviewCount: 0,
+            rating: 0,
           };
           await addUserToDatabase(user);
           // await addUserToDatabase(userdata);
