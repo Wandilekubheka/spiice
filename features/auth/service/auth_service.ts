@@ -1,21 +1,21 @@
 import { UserResource } from "@clerk/types/";
 import { db } from "../../../firebase";
 import {
-  collection,
-  addDoc,
   getDoc,
   doc,
   DocumentReference,
   DocumentData,
   deleteDoc,
   updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import { UserModel } from "@/@types/userModel";
 import { firestoreErrors } from "../data/authErrors";
 import { addPrefixToKeys } from "@/utils/prefixToKey";
 const addUserToDatabase = async (user: UserModel) => {
   try {
-    await addDoc(collection(db, "users"), user);
+    const docRef = doc(db, "users", user.uid);
+    await setDoc(docRef, user);
   } catch (error: any) {
     const code = error.code || "internal";
     const message =
@@ -35,6 +35,8 @@ const getUserFromDatabase = async (user_id: string) => {
 
     // Fetch the document
     const docSnap = await getDoc(docRef);
+    console.log("sdad");
+
     // verify doc exists
     if (docSnap.exists()) {
       // return user UserModel

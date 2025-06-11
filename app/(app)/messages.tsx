@@ -12,5 +12,4 @@ const MessagesScreen = (props: Props) => {
 };
 
 export default MessagesScreen;
-Screen;
 const styles = StyleSheet.create({});

@@ -1,7 +1,13 @@
 import { useAuth } from "@clerk/clerk-expo";
-import { Slot, Stack } from "expo-router";
+import { Slot, Stack, Tabs } from "expo-router";
 const AppLayout = () => {
-  return <Stack />;
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+      }}
+    />
+  );
 };
 
 export default AppLayout;

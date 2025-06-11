@@ -1,20 +1,22 @@
-import { UserResource } from "@clerk/types/";
 import { db } from "@/firebase";
 import {
-  collection,
-  addDoc,
   getDoc,
   doc,
   DocumentReference,
   DocumentData,
   deleteDoc,
   updateDoc,
+  setDoc,
 } from "firebase/firestore";
-import { UserModel } from "@/@types/userModel";
 import { addPrefixToKeys } from "@/utils/prefixToKey";
-const addDocToDatabse = async (docModel: object, collectionName: string) => {
+const addDocToDatabse = async (
+  docModel: object,
+  collectionName: string,
+  docID: string
+) => {
   try {
-    await addDoc(collection(db, collectionName), docModel);
+    const docRef = doc(db, "users", docID);
+    await setDoc(docRef, docModel);
   } catch (error: any) {
     const code = error.code || "internal";
     throw new Error(code);

@@ -1,13 +1,15 @@
 import { useAuth } from "@clerk/clerk-expo";
-import { Redirect, Slot } from "expo-router";
+import { Redirect, router, Slot } from "expo-router";
+import { useEffect } from "react";
 const AuthLayout = () => {
   const { isSignedIn } = useAuth();
 
-  const isUser = true;
+  useEffect(() => {
+    if (isSignedIn) {
+      router.replace("/(app)/home");
+    }
+  }, [isSignedIn]);
 
-  if (isSignedIn && isUser) {
-    return <Redirect href={"/(app)/home"} />;
-  }
   return <Slot />;
 };
 
