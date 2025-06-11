@@ -18,20 +18,21 @@ import { ProjectStatus } from "@/features/@types/ProjectStatus";
 
 const HomeScreen = () => {
   const { isLoaded, isSignedIn, user } = useUser();
-  const { error, userData } = user?.id
+  const { error, userData, userProjects } = user?.id
     ? useUserStats(user!.id)
-    : { userData: null, error: null };
+    : { userData: null, error: null, userProjects: [] };
   useEffect(() => {
     if (!isLoaded) return;
+
     if (!isSignedIn) {
       router.push("/");
     }
   }, [user]);
-  // useEffect(() => {
-  //   if (error) {
-  //     Alert.alert(error);
-  //   }
-  // }, [error]);
+  useEffect(() => {
+    if (error != null) {
+      Alert.alert(error);
+    }
+  }, [error]);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -57,11 +58,20 @@ const HomeScreen = () => {
               </ThemeText>
             </TouchableOpacity>
           </View>
-          <ProjectOverview
-            title={"Wireframes"}
-            clientName={"Francisco Fisher"}
-            status={ProjectStatus.active}
-          />
+          {userProjects!.length == 0 ? (
+            <ThemeText style={styles.noProjectText}>
+              No active Projects
+            </ThemeText>
+          ) : (
+            userProjects!.map((item, index) => (
+              <ProjectOverview
+                key={index}
+                title={item.title}
+                clientName={item.clientName}
+                status={item.status}
+              />
+            ))
+          )}
         </View>
       </SafeAreaView>
     </ScrollView>
@@ -100,5 +110,15 @@ const styles = StyleSheet.create({
   },
   viewPadding: {
     padding: 10,
+  },
+  projectsContainer: {
+    backgroundColor: "red",
+    flex: 1,
+    height: "auto",
+  },
+  noProjectText: {
+    textAlign: "center",
+    fontWeight: "bold",
+    marginTop: 50,
   },
 });

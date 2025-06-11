@@ -2,14 +2,9 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { ProjectStatus } from "@/features/@types/ProjectStatus";
 import { ThemeText } from "@/components/StyledText";
+import { projectType } from "@/@types/ProjectType";
 
-type Props = {
-  title: string;
-  clientName: string;
-  status: ProjectStatus;
-};
-
-const ProjectOverview = ({ title, clientName, status }: Props) => {
+const ProjectOverview = ({ title, clientName, status }: projectType) => {
   return (
     <View style={styles.container}>
       <ThemeText style={styles.projectTitle}>{title}</ThemeText>

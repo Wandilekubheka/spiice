@@ -6,7 +6,9 @@ type Props = {};
 const SearchScreen = (props: Props) => {
   return (
     <View>
-      <Text>SearchScreen</Text>
+      <Text>
+        SearchS.==============================``````````1111111111111111==--[[[[[[[[[ttt]]]]]]]]].....creen
+      </Text>
     </View>
   );
 };
