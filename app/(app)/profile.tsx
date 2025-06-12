@@ -16,6 +16,7 @@ const ProfileScreen = (props: Props) => {
         <ThemeText
           style={{
             fontSize: 32,
+
             fontWeight: "black",
             fontFamily: "RedHatDisplayBB",
           }}

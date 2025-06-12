@@ -3,6 +3,7 @@ import React, { version } from "react";
 import { ThemeText } from "@/components/StyledText";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MessageCard from "@/features/messages/components/MessageCard";
+import { router } from "expo-router";
 
 type Props = {};
 
@@ -23,6 +24,9 @@ const MessagesScreen = (props: Props) => {
         Messages
       </ThemeText>
       <MessageCard
+        onPress={() => {
+          router.push("/other/chat");
+        }}
         creator="Wandile Kubheka"
         message="Hey, I am interested in your proposal."
         backgroundColor={index % 2 === 0 ? "#FFFFFF" : bgColor}

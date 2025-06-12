@@ -8,12 +8,14 @@ type Props = {
   creatorAvatarurl?: string;
   creator: string;
   message: string;
+  onPress: () => void;
 };
 
 const MessageCard = (props: Props) => {
   return (
     <TouchableOpacity
       style={[styles.container, { backgroundColor: props.backgroundColor }]}
+      onPress={props.onPress}
     >
       <View style={styles.leftContent}>
         {props.creatorAvatarurl ? (
