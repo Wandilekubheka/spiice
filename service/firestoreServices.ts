@@ -7,15 +7,27 @@ import {
   deleteDoc,
   updateDoc,
   setDoc,
+  addDoc,
+  collection,
 } from "firebase/firestore";
 import { addPrefixToKeys } from "@/utils/prefixToKey";
 const addDocToDatabse = async (
   docModel: object,
   collectionName: string,
-  docID: string
+  docID?: string
 ) => {
   try {
-    const docRef = doc(db, "users", docID);
+    let docRef: DocumentReference<DocumentData, DocumentData>;
+    if (docID) {
+      // if docID is provided, update the existing document
+      docRef = doc(db, collectionName, docID);
+      await setDoc(docRef, docModel, { merge: true });
+
+      return;
+    } else {
+      docRef = doc(collection(db, collectionName));
+      // if docID is not provided, create a new document
+    }
     await setDoc(docRef, docModel);
   } catch (error: any) {
     const code = error.code || "internal";
