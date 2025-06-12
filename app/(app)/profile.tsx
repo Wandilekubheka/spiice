@@ -16,7 +16,6 @@ const ProfileScreen = (props: Props) => {
         <ThemeText
           style={{
             fontSize: 32,
-            marginTop: 20,
             fontWeight: "black",
             fontFamily: "RedHatDisplayBB",
           }}
@@ -47,15 +46,46 @@ const ProfileScreen = (props: Props) => {
           <ThemeText style={styles.profileText}>retroff01@gmail.com</ThemeText>
         </View>
       </View>
-      <CustomNavButtons
-        onPress={() => {
-          // handle navigation or action here
-        }}
-        title="Edit Profile"
-        icon={
-          <Ionicons name="create-outline" size={24} color={Colors.light.tint} />
-        }
-      />
+      <View>
+        <CustomNavButtons
+          onPress={() => {
+            // handle navigation or action here
+          }}
+          title="Edit Profile"
+          icon={
+            <Ionicons
+              name="create-outline"
+              size={24}
+              color={Colors.light.tint}
+            />
+          }
+        />
+        <CustomNavButtons
+          onPress={() => {
+            // handle navigation or action here
+          }}
+          title="Privacy Policy"
+          icon={
+            <Ionicons name="lock-closed" size={24} color={Colors.light.tint} />
+          }
+        />
+        <CustomNavButtons
+          onPress={() => {
+            // handle navigation or action here
+          }}
+          title="Settings"
+          icon={
+            <Ionicons name="settings" size={24} color={Colors.light.tint} />
+          }
+        />
+        <CustomNavButtons
+          onPress={() => {
+            // handle navigation or action here
+          }}
+          title="Sign out"
+          icon={<Ionicons name="log-out" size={24} color={Colors.light.tint} />}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -65,6 +95,7 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "space-around",
 
     backgroundColor: "#FAF9FE",
     gap: 20,
