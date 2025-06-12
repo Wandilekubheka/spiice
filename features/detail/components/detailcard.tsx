@@ -13,22 +13,22 @@ const DetailCard = ({ title, amount, summary }: DetailCardData) => {
         onPress={() => setToggled(!toggled)}
         style={styles.content}
       >
-        <ThemeText>{title}</ThemeText>
-        <View>
-          <ThemeText>{amount}</ThemeText>
+        <ThemeText style={styles.titleText}>{title}</ThemeText>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <ThemeText style={styles.amountText}>{amount}</ThemeText>
           <Ionicons
             name={toggled ? "chevron-up" : "chevron-down"}
             size={20}
             color={"#99879D"}
           />
         </View>
-        {toggled && (
-          <View>
-            <ThemeText>Quantity: {quantity[0]}</ThemeText>
-            <ThemeText>Date: {date[0]}</ThemeText>
-          </View>
-        )}
       </TouchableOpacity>
+      {toggled && (
+        <View>
+          <ThemeText>Quantity: {quantity[0]}</ThemeText>
+          <ThemeText>Date: {date[0]}</ThemeText>
+        </View>
+      )}
     </View>
   );
 };
@@ -40,13 +40,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
+    alignItems: "center",
   },
   container: {
     backgroundColor: "#FFFFFF",
     padding: 10,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     borderColor: "#99879D",
+  },
+  titleText: {
+    fontSize: 18,
+    fontWeight: "500",
+    fontFamily: "RedHatDisplayM",
+  },
+  amountText: {
+    fontSize: 40,
+    fontWeight: "700",
+    fontFamily: "RedHatDisplayB",
+    color: "#000000",
   },
 });

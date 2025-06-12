@@ -33,9 +33,10 @@ const Detail = (props: Props) => {
             color: "#99879D",
           }}
         >
-          Detail
+          Back
         </ThemeText>
       </TouchableOpacity>
+      <ThemeText style={styles.titleText}>Details</ThemeText>
       <DetailCard
         title="Total Gains"
         amount={30}
@@ -74,4 +75,12 @@ const Detail = (props: Props) => {
 
 export default Detail;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 24,
+    fontWeight: "700",
+    fontFamily: "RedHatDisplayB",
+    padding: 15,
+    color: "#99879D",
+  },
+});
