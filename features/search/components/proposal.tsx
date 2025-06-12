@@ -1,23 +1,19 @@
-import { Image, StyleSheet, Text, View, FlatList } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  View,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { ThemeText } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
-
-type jobCard = {
-  creator: string;
-  creatorAvatarurl?: string;
-  title: string;
-  description: string;
-  postedDate: string;
-  offerCount: number;
-  budget: number;
-  skills: string[];
-};
+import { jobCard } from "../@types/jobCard";
 
 const Proposal = (props: jobCard) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container}>
       <View style={styles.headerContainer}>
         {props.creatorAvatarurl ? (
           <Image
@@ -72,7 +68,7 @@ const Proposal = (props: jobCard) => {
           horizontal
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
