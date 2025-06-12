@@ -52,7 +52,7 @@ const getMessages = async (conversationId: string) => {
   }
 };
 
-const getConversatioList = async (userId: string) => {
+const getConversationsList = async (userId: string) => {
   try {
     const docSnap = await getDocs(
       query(
@@ -76,4 +76,4 @@ const getConversatioList = async (userId: string) => {
   }
 };
 
-export { sendMessage, getMessages, getConversatioList };
+export { sendMessage, getMessages, getConversationsList };
