@@ -35,7 +35,6 @@ const getUserFromDatabase = async (user_id: string) => {
 
     // Fetch the document
     const docSnap = await getDoc(docRef);
-    console.log("sdad");
 
     // verify doc exists
     if (docSnap.exists()) {

@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect } from "react";
 import { useAuth, useUser } from "@clerk/clerk-expo";
@@ -33,6 +34,14 @@ const HomeScreen = () => {
       Alert.alert(error);
     }
   }, [error]);
+  if (!isLoaded || userData == null || userProjects == null) {
+    // Show a loading state while the user data is being fetched
+    return (
+      <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
