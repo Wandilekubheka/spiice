@@ -1,6 +1,6 @@
 import { db } from "@/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { ProjectStatus } from "../@types/ProjectStatus";
+import { ProjectStatus } from "../../@types/ProjectStatus";
 import { projectType } from "@/@types/ProjectType";
 
 const getActiveTasksForUser = async (userID: string) => {

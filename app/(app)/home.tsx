@@ -1,21 +1,18 @@
 import {
   Alert,
   StyleSheet,
-  Text,
   View,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect } from "react";
-import { useAuth, useUser } from "@clerk/clerk-expo";
+import { useUser } from "@clerk/clerk-expo";
 import useUserStats from "@/features/home/hooks/useUserStats";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeText } from "@/components/StyledText";
-import Colors from "@/constants/Colors";
 import ProjectOverview from "@/features/home/components/ProjectOverview";
-import { ProjectStatus } from "@/features/@types/ProjectStatus";
 
 const HomeScreen = () => {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -51,7 +48,37 @@ const HomeScreen = () => {
           <ThemeText style={styles.subHeader}>Resume</ThemeText>
         </View>
 
-        <View style={styles.summaryContainer}></View>
+        <TouchableOpacity
+          onPress={() =>
+            router.push({
+              pathname: "/other/detail",
+              params: { data: JSON.stringify(userData) },
+            })
+          }
+          style={styles.summaryContainer}
+        >
+          <ThemeText
+            style={{
+              fontWeight: "700",
+              fontSize: 20,
+              fontFamily: "RedHatDisplayB",
+              padding: 10,
+              color: "#99879D",
+            }}
+          >
+            TOTAL GAIN
+          </ThemeText>
+          <ThemeText
+            style={{
+              fontWeight: "700",
+              fontSize: 60,
+              fontFamily: "RedHatDisplayB",
+              padding: 10,
+            }}
+          >
+            {userData.totalGain}K
+          </ThemeText>
+        </TouchableOpacity>
         <View style={styles.viewPadding}>
           <View
             style={{
@@ -109,6 +136,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 250,
     backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
   },
   viewAllButton: {
     backgroundColor: "#FBEAFF",
