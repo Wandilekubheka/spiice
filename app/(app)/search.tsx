@@ -9,6 +9,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeText } from "@/components/StyledText";
 import { Ionicons } from "@expo/vector-icons";
+import Proposal from "@/features/search/components/proposal";
 
 type Props = {};
 
@@ -19,7 +20,6 @@ const SearchScreen = (props: Props) => {
         style={{
           fontSize: 40,
           fontWeight: "black",
-          marginBottom: 20,
           fontFamily: "RedHatDisplayBB",
         }}
       >
@@ -45,6 +45,15 @@ const SearchScreen = (props: Props) => {
           Filters
         </ThemeText>
       </TouchableOpacity>
+      <Proposal
+        title="React Native Developer"
+        description="Looking for a React Native developer to build a mobile app."
+        postedDate="2023-10-01"
+        offerCount={5}
+        budget={1000}
+        skills={["React Native", "JavaScript", "TypeScript"]}
+        creator={"Wandile Kubheka"}
+      />
     </SafeAreaView>
   );
 };
@@ -56,6 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FAF9FE",
     padding: 20,
+    gap: 20,
   },
   searchContainer: {
     flexDirection: "row",
