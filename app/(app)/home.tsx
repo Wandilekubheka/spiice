@@ -13,17 +13,16 @@ import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeText } from "@/components/StyledText";
 import ProjectOverview from "@/features/home/components/ProjectOverview";
+import useUserrStore from "@/store/useUserStore";
 
 const HomeScreen = () => {
-  const { isLoaded, isSignedIn, user } = useUser();
-  const { error, userData, userProjects } = user?.id
-    ? useUserStats(user!.id)
+  const user = useUserrStore((state) => state.user);
+  const { error, userData, userProjects } = user?.uid
+    ? useUserStats(user.uid)
     : { userData: null, error: null, userProjects: [] };
   useEffect(() => {
-    if (!isLoaded) return;
-
-    if (!isSignedIn) {
-      router.push("/");
+    if (user == null) {
+      router.replace("/(auth)/login");
     }
   }, [user]);
   useEffect(() => {
@@ -31,7 +30,7 @@ const HomeScreen = () => {
       Alert.alert(error);
     }
   }, [error]);
-  if (!isLoaded || userData == null || userProjects == null) {
+  if (userData == null || userProjects == null) {
     // Show a loading state while the user data is being fetched
     return (
       <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>

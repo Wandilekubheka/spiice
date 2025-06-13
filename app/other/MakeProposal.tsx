@@ -15,7 +15,6 @@ import { ThemeText } from "@/components/StyledText";
 import { router } from "expo-router";
 import Colors from "@/constants/Colors";
 import StyledButton from "@/components/styledButton";
-import StylesInput from "@/components/StylesInput";
 import { jobCard } from "@/features/search/@types/jobCard";
 import useMakeProposal from "@/features/search/hooks/useMakeProposal";
 import { OfferStatus } from "@/features/search/@types/offerstatus";

@@ -12,6 +12,9 @@ import "react-native-reanimated";
 
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { tokenCache } from "@clerk/clerk-expo/token-cache";
+import { getUserFromDatabase } from "@/features/auth/service/auth_service";
+import { Alert } from "react-native";
+import useUserrStore, { UserStoreType } from "@/store/useUserStore";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -62,14 +65,43 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const { isLoaded, isSignedIn } = useAuth();
+  const { isLoaded, isSignedIn, userId } = useAuth();
+  const userContext = useUserrStore((state: UserStoreType) => state);
   useEffect(() => {
     if (!isLoaded) return;
 
     // Redirect to the home screen if the user is signed in
     if (!isSignedIn) {
-      router.replace("/");
+      router.replace("/(auth)/login");
+    } else if (userId) {
+      updateGlobalStore()
+        .then(() => {
+          router.replace("/(app)/home");
+        })
+        .catch((error) => {
+          console.error("Error updating global store:", error);
+          Alert.alert(error);
+        });
     }
   }, [isLoaded, isSignedIn]);
+
+  const updateGlobalStore = async () => {
+    if (userId) {
+      try {
+        const appUser = await getUserFromDatabase(userId);
+        if (appUser) {
+          userContext.setUser(appUser);
+        } else {
+          console.warn("No user data found for the given userId.");
+          userContext.clearUser();
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        userContext.clearUser();
+
+        Alert.alert("Error fetching user data. Please try again later.");
+      }
+    }
+  };
   return <Slot initialRouteName="(auth)" />;
 }
