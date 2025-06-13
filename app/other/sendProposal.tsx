@@ -5,8 +5,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { jobCard } from "@/features/search/@types/jobCard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Route } from "expo-router/build/Route";
@@ -16,10 +17,32 @@ import { Ionicons } from "@expo/vector-icons";
 import { ThemeText } from "@/components/StyledText";
 import StyledButton from "@/components/styledButton";
 import { router } from "expo-router";
+import useMessages from "@/features/messages/hooks/useMessages";
+import { useUser } from "@clerk/clerk-expo";
 
 const SendProposal = () => {
   const { data }: { data: string } = useLocalSearchParams();
+  const { user, isLoaded, isSignedIn } = useUser();
+  const { createChat, error } = useMessages();
   const proposal = JSON.parse(data).proposal as jobCard;
+
+  useEffect(() => {
+    if (error != null) {
+      Alert.alert(error);
+    }
+  }, [error]);
+
+  const createChatButton = async () => {
+    if (!isLoaded || !isSignedIn || user == null) {
+      Alert.alert("You must be signed in to create a chat");
+      return;
+    }
+    // for now we will use userhook to get our ID
+    await createChat(
+      [user.id, proposal.creatorId],
+      `Proposal for ${proposal.title} let me know if you are interested!`
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,7 +125,7 @@ const SendProposal = () => {
       </ScrollView>
 
       <View style={{ marginVertical: 10 }}>
-        <StyledButton onPress={() => {}} title="Make a proposition" />
+        <StyledButton onPress={createChatButton} title="Make a proposition" />
       </View>
     </SafeAreaView>
   );
