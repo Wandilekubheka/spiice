@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { UserModel } from "@/@types/userModel";
 import { getUserFromDatabase } from "@/features/auth/service/auth_service";
-import { ProjectStatus } from "@/features/@types/ProjectStatus";
 import getActiveTasksForUser from "@/features/home/services/firestoreService";
 import { projectType } from "@/@types/ProjectType";
 

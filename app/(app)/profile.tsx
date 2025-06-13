@@ -6,10 +6,13 @@ import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import CustomNavButtons from "@/features/profile/components/CustomNavButtons";
 import { useAuth, useUser } from "@clerk/clerk-expo";
+import useUserrStore from "@/store/useUserStore";
 
 const ProfileScreen = () => {
   const { signOut, isLoaded, isSignedIn } = useAuth();
-  const image = null;
+  const user = useUserrStore((state) => state.user);
+  const image = user?.photoURL || null;
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topOverview}>
@@ -43,8 +46,8 @@ const ProfileScreen = () => {
           </View>
         )}
         <View style={{ alignItems: "center", gap: 5 }}>
-          <ThemeText style={styles.profileText}>Wandile Kubheka</ThemeText>
-          <ThemeText style={styles.profileText}>retroff01@gmail.com</ThemeText>
+          <ThemeText style={styles.profileText}>{user?.displayName}</ThemeText>
+          <ThemeText style={styles.profileText}>{user?.email}</ThemeText>
         </View>
       </View>
       <View>

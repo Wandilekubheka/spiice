@@ -99,12 +99,7 @@ const HomeScreen = () => {
             </ThemeText>
           ) : (
             userProjects?.map((item, index) => (
-              <ProjectOverview
-                key={index}
-                title={item.title}
-                clientName={item.clientName}
-                status={item.status}
-              />
+              <ProjectOverview key={index} {...item} />
             ))
           )}
         </View>

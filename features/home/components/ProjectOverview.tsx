@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { ProjectStatus } from "@/features/@types/ProjectStatus";
 import { ThemeText } from "@/components/StyledText";
 import { projectType } from "@/@types/ProjectType";
 

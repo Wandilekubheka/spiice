@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { jobCard } from "../@types/jobCard";
-import { OfferStatus } from "../@types/offerstatus";
+import { OfferStatus } from "../../@types/offerstatus";
 import { addProposal } from "../services/searchService";
 
 const useMakeProposal = () => {

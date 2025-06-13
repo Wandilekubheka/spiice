@@ -19,11 +19,12 @@ import StyledButton from "@/components/styledButton";
 import { router } from "expo-router";
 import useMessages from "@/features/messages/hooks/useMessages";
 import { useUser } from "@clerk/clerk-expo";
+import useUserrStore from "@/store/useUserStore";
 
 const SendProposal = () => {
   const { data }: { data: string } = useLocalSearchParams();
-  const { user, isLoaded, isSignedIn } = useUser();
   const { createChat, error } = useMessages();
+  const user = useUserrStore((state) => state.user);
   const proposal = JSON.parse(data).proposal as jobCard;
 
   useEffect(() => {
@@ -33,13 +34,13 @@ const SendProposal = () => {
   }, [error]);
 
   const createChatButton = async () => {
-    if (!isLoaded || !isSignedIn || user == null) {
+    if (user == null) {
       Alert.alert("You must be signed in to create a chat");
       return;
+    } else {
     }
-    // for now we will use userhook to get our ID
     await createChat(
-      [user.id, proposal.creatorId],
+      [user.uid, proposal.creatorId],
       `Proposal for ${proposal.title} let me know if you are interested!`
     );
   };

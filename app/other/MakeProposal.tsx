@@ -17,7 +17,8 @@ import Colors from "@/constants/Colors";
 import StyledButton from "@/components/styledButton";
 import { jobCard } from "@/features/search/@types/jobCard";
 import useMakeProposal from "@/features/search/hooks/useMakeProposal";
-import { OfferStatus } from "@/features/search/@types/offerstatus";
+import { OfferStatus } from "@/features/@types/offerstatus";
+import useUserrStore from "@/store/useUserStore";
 
 type Props = {
   creatorAvatarurl?: string;
@@ -30,6 +31,7 @@ const MakeProposal = (props: Props) => {
   const [skillSet, setSkillSet] = useState<string[]>([]);
   const [skill, setSkill] = useState("");
   const { error, status, makeProposal } = useMakeProposal();
+  const user = useUserrStore((state) => state.user);
   useEffect(() => {
     if (error) {
       Alert.alert(error);
@@ -42,6 +44,12 @@ const MakeProposal = (props: Props) => {
       router.back();
     }
   }, [status]);
+  useEffect(() => {
+    if (user == null) {
+      router.replace("/(auth)/login");
+      return;
+    }
+  }, [user]);
 
   const handleSendProposal = async () => {
     if (!description || !skillSet.length || !title || !price) {
@@ -55,14 +63,14 @@ const MakeProposal = (props: Props) => {
     }
     budget = Number(price);
     const proposalData: jobCard = {
-      creator: "wandile_kubheka",
+      creator: user!.displayName,
       title: title,
       description: description,
       postedDate: new Date(),
       offerCount: 0,
       budget,
       skills: skillSet,
-      creatorId: "wandile_kubheka",
+      creatorId: user!.uid,
     };
     await makeProposal(proposalData);
     // Reset fields after sending

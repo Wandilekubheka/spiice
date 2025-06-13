@@ -19,12 +19,7 @@ import StyledButton from "@/components/styledButton";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { error, isLoading, status, onSignInPress } = useLoginUser();
-  useEffect(() => {
-    if (status === AuthStatus.Success) {
-      router.replace("/");
-    }
-  }, [status]);
+  const { error, onSignInPress } = useLoginUser();
 
   useEffect(() => {
     if (error) {

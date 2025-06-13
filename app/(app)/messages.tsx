@@ -6,23 +6,21 @@ import MessageCard from "@/features/messages/components/MessageCard";
 import { router } from "expo-router";
 import useMessages from "@/features/messages/hooks/useMessages";
 import { useUser } from "@clerk/clerk-expo";
+import useUserrStore from "@/store/useUserStore";
 
 const bgColor = "#FAF9FE"; // Default background color
 const MessagesScreen = () => {
   const { loading, error, fetchConversations, conversations } = useMessages();
-  const { user, isLoaded, isSignedIn } = useUser();
+  const user = useUserrStore((state) => state.user);
 
   useEffect(() => {
-    if (!isLoaded || loading) return;
-    if (!isSignedIn) {
+    if (!user) {
       router.push("/");
-    }
-    if (user === null) {
-      console.error("User is null, cannot fetch conversations.");
       return;
     }
-    fetchConversations(user.id);
-  }, [isLoaded, user]);
+
+    fetchConversations(user.uid);
+  }, [user]);
 
   useEffect(() => {
     if (error) {

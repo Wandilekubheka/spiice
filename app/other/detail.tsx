@@ -7,14 +7,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import DetailCard from "@/features/detail/components/detailcard";
 
-type Props = {};
-
-const Detail = (props: Props) => {
+const Detail = () => {
   const { data }: { data: string } = useLocalSearchParams();
+  const parsedData = JSON.parse(data);
 
   useEffect(() => {
     if (data) {
-      const parsedData = JSON.parse(data);
     }
   }, [data]);
   return (

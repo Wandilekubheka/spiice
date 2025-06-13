@@ -71,9 +71,9 @@ function RootLayoutNav() {
     if (!isLoaded) return;
 
     // Redirect to the home screen if the user is signed in
-    if (!isSignedIn) {
-      router.replace("/(auth)/login");
-    } else if (userId) {
+    if (userId) {
+      router.navigate("/(app)/home");
+
       updateGlobalStore()
         .then(() => {
           router.replace("/(app)/home");
@@ -83,7 +83,7 @@ function RootLayoutNav() {
           Alert.alert(error);
         });
     }
-  }, [isLoaded, isSignedIn]);
+  }, [isSignedIn]);
 
   const updateGlobalStore = async () => {
     if (userId) {

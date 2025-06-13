@@ -33,14 +33,6 @@ function RegisterScreen({}: Props) {
     }
   }, [error]);
 
-  useEffect(() => {
-    console.log(status);
-
-    if (status === AuthStatus.Success) {
-      router.replace("/(app)/home");
-    }
-  }, [status]);
-
   if (status === AuthStatus.TwoStepRequired) {
     return (
       <EntercodeScreen action={onVerifyPress} status={status} error={error} />
