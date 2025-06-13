@@ -5,7 +5,7 @@ import { ThemeText } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import CustomNavButtons from "@/features/profile/components/CustomNavButtons";
-import { useAuth } from "@clerk/clerk-expo";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 
 const ProfileScreen = () => {
   const { signOut, isLoaded, isSignedIn } = useAuth();

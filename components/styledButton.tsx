@@ -21,7 +21,7 @@ export default StyledButton;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.light.tint,
-    borderRadius: 10,
+    borderRadius: 99,
     alignItems: "center",
   },
   title: {

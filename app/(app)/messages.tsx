@@ -44,28 +44,7 @@ const MessagesScreen = () => {
       </SafeAreaView>
     );
   }
-  if (conversations.length === 0) {
-    return (
-      <SafeAreaView
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          flex: 1,
-          backgroundColor: bgColor,
-        }}
-      >
-        <ThemeText
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            padding: 20,
-          }}
-        >
-          No messages found.
-        </ThemeText>
-      </SafeAreaView>
-    );
-  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ThemeText
@@ -80,6 +59,11 @@ const MessagesScreen = () => {
       </ThemeText>
       <FlatList
         data={conversations}
+        ListEmptyComponent={
+          <ThemeText style={{ textAlign: "center", marginTop: 20 }}>
+            No messages
+          </ThemeText>
+        }
         renderItem={({ item, index }) => (
           <MessageCard
             onPress={() => {

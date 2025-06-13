@@ -76,7 +76,7 @@ const HomeScreen = () => {
               padding: 10,
             }}
           >
-            {userData.totalGain}K
+            {userData.totalGain}
           </ThemeText>
         </TouchableOpacity>
         <View style={styles.viewPadding}>

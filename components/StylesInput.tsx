@@ -18,9 +18,12 @@ const StylesInput = (props: Props) => {
   return (
     <View style={styles.container}>
       <TextInput
+        autoCapitalize="none"
+        autoCorrect={false}
         placeholder={props.placeholder}
         onChangeText={(text) => props.callback(text)}
         secureTextEntry={hideSecure && props.secure}
+        style={{ flex: 1, height: "100%" }}
       />
       {props.secure && (
         <TouchableOpacity

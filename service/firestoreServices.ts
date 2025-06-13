@@ -18,17 +18,16 @@ const addDocToDatabse = async (
 ) => {
   try {
     let docRef: DocumentReference<DocumentData, DocumentData>;
+
     if (docID) {
       // if docID is provided, update the existing document
       docRef = doc(db, collectionName, docID);
-      await setDoc(docRef, docModel, { merge: true });
-
-      return;
     } else {
       docRef = doc(collection(db, collectionName));
       // if docID is not provided, create a new document
     }
     await setDoc(docRef, docModel);
+    return docRef.id; // return the document ID
   } catch (error: any) {
     const code = error.code || "internal";
     throw new Error(code);

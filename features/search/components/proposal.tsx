@@ -10,10 +10,19 @@ import { ThemeText } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { jobCard } from "../@types/jobCard";
+import { router } from "expo-router";
 
 const Proposal = (props: jobCard) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      onPress={() => {
+        router.push({
+          pathname: "/other/sendProposal",
+          params: { data: JSON.stringify({ proposal: props }) },
+        });
+      }}
+      style={styles.container}
+    >
       <View style={styles.headerContainer}>
         {props.creatorAvatarurl ? (
           <Image
@@ -44,7 +53,7 @@ const Proposal = (props: jobCard) => {
       </View>
       <View style={styles.contentContainer}>
         <ThemeText style={{ fontSize: 12, color: "#99879D" }}>
-          Posted on {props.postedDate}
+          Posted on {props.postedDate.toString()}
         </ThemeText>
         <ThemeText style={styles.jobTitle}>{props.title}</ThemeText>
         <ThemeText style={{ fontSize: 16, color: "#99879D" }}>

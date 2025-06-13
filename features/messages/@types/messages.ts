@@ -2,9 +2,7 @@ import { UserModel } from "@/@types/userModel";
 import { Timestamp } from "firebase/firestore";
 
 export interface Conversation {
-  id: string;
   participants: UserModel[]; // Array of user IDs or usernames
-  messages: Message[];
   lastMessage: string;
   lastSender: "me" | "other"; // Indicates if the last message was sent by the current user or the other participant
 }

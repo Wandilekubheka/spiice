@@ -12,6 +12,8 @@ import { ThemeText } from "@/components/StyledText";
 import { Ionicons } from "@expo/vector-icons";
 import Proposal from "@/features/search/components/proposal";
 import useSearch from "@/features/search/hooks/useSearch";
+import Colors from "@/constants/Colors";
+import { router } from "expo-router";
 
 type Props = {};
 
@@ -53,7 +55,12 @@ const SearchScreen = (props: Props) => {
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
-        <Ionicons name="search" size={24} color="#99879D" />
+        <TouchableOpacity
+          onPress={() => handleSearch(searchQuery)}
+          style={{ padding: 10 }}
+        >
+          <Ionicons name="search" size={24} color="#99879D" />
+        </TouchableOpacity>
       </View>
 
       <TouchableOpacity
@@ -63,7 +70,6 @@ const SearchScreen = (props: Props) => {
           marginTop: 20,
           gap: 10,
         }}
-        onPress={() => handleSearch(searchQuery)}
       >
         <Ionicons name="filter" size={24} color="#99879D" />
         <ThemeText
@@ -83,6 +89,21 @@ const SearchScreen = (props: Props) => {
           </ThemeText>
         }
       />
+      <TouchableOpacity
+        onPress={() => {
+          router.push("/other/MakeProposal");
+        }}
+        style={{
+          position: "absolute",
+          bottom: 20,
+          right: 20,
+          backgroundColor: Colors.light.tint,
+          borderRadius: 20,
+          padding: 20,
+        }}
+      >
+        <Ionicons name="add" size={24} color="white" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
