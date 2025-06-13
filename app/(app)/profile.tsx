@@ -5,10 +5,10 @@ import { ThemeText } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import CustomNavButtons from "@/features/profile/components/CustomNavButtons";
+import { useAuth } from "@clerk/clerk-expo";
 
-type Props = {};
-
-const ProfileScreen = (props: Props) => {
+const ProfileScreen = () => {
+  const { signOut, isLoaded, isSignedIn } = useAuth();
   const image = null;
   return (
     <SafeAreaView style={styles.container}>
@@ -81,7 +81,9 @@ const ProfileScreen = (props: Props) => {
         />
         <CustomNavButtons
           onPress={() => {
-            // handle navigation or action here
+            if (isLoaded && isSignedIn) {
+              signOut();
+            }
           }}
           title="Sign out"
           icon={<Ionicons name="log-out" size={24} color={Colors.light.tint} />}

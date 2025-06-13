@@ -40,7 +40,6 @@ const LoginScreen = () => {
         <ThemeText
           style={{
             fontFamily: "RedHatDisplayBB",
-            fontWeight: "bold",
             fontSize: 27,
             marginBottom: 10,
             color: "black",

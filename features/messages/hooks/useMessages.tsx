@@ -5,9 +5,7 @@ import {
   getMessages,
 } from "../services/firestoreService";
 
-type Props = {};
-
-const useMessages = (props: Props) => {
+const useMessages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);

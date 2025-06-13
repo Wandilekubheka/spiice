@@ -1,9 +1,14 @@
 import { AuthStatus } from "@/@types/authStatus";
-import { View, Text } from "@/components/Themed";
 import useRegisterUser from "@/features/auth/hooks/useRegister";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ForgotPassScreen from "./forgotPass";
 import EntercodeScreen from "./entercode";

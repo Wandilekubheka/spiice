@@ -94,12 +94,12 @@ const HomeScreen = () => {
               </ThemeText>
             </TouchableOpacity>
           </View>
-          {userProjects!.length == 0 ? (
+          {userProjects?.length == 0 ? (
             <ThemeText style={styles.noProjectText}>
               No active Projects
             </ThemeText>
           ) : (
-            userProjects!.map((item, index) => (
+            userProjects?.map((item, index) => (
               <ProjectOverview
                 key={index}
                 title={item.title}

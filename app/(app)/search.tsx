@@ -1,19 +1,40 @@
 import {
+  Alert,
+  FlatList,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeText } from "@/components/StyledText";
 import { Ionicons } from "@expo/vector-icons";
 import Proposal from "@/features/search/components/proposal";
+import useSearch from "@/features/search/hooks/useSearch";
 
 type Props = {};
 
 const SearchScreen = (props: Props) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const { error, searchResults, searchUserByName } = useSearch();
+
+  useEffect(() => {
+    if (error) {
+      console.error("Search error:", error);
+      Alert.alert(error);
+    }
+  }, [error]);
+
+  const handleSearch = async (query: string) => {
+    try {
+      searchUserByName(query);
+    } catch (error: any) {
+      console.error("Error during search:", error);
+      Alert.alert(error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ThemeText
@@ -26,10 +47,15 @@ const SearchScreen = (props: Props) => {
         Search
       </ThemeText>
       <View style={styles.searchContainer}>
-        <TextInput style={styles.searchInput} placeholder="search" />
-        {/* // add a search event handler */}
+        <TextInput
+          style={styles.searchInput}
+          placeholder="search"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
         <Ionicons name="search" size={24} color="#99879D" />
       </View>
+
       <TouchableOpacity
         style={{
           flexDirection: "row",
@@ -37,6 +63,7 @@ const SearchScreen = (props: Props) => {
           marginTop: 20,
           gap: 10,
         }}
+        onPress={() => handleSearch(searchQuery)}
       >
         <Ionicons name="filter" size={24} color="#99879D" />
         <ThemeText
@@ -45,14 +72,16 @@ const SearchScreen = (props: Props) => {
           Filters
         </ThemeText>
       </TouchableOpacity>
-      <Proposal
-        title="React Native Developer"
-        description="Looking for a React Native developer to build a mobile app."
-        postedDate="2023-10-01"
-        offerCount={5}
-        budget={1000}
-        skills={["React Native", "JavaScript", "TypeScript"]}
-        creator={"Wandile Kubheka"}
+      <FlatList
+        data={searchResults}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item }) => <Proposal {...item} />}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        ListEmptyComponent={
+          <ThemeText style={{ textAlign: "center", marginTop: 20 }}>
+            No results found
+          </ThemeText>
+        }
       />
     </SafeAreaView>
   );

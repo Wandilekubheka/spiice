@@ -1,5 +1,5 @@
 import Colors from "@/constants/Colors";
-import { Text, TextProps } from "./Themed";
+import { Text, TextProps } from "react-native";
 
 export function ThemeText(props: TextProps) {
   return (

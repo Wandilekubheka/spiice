@@ -1,16 +1,71 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { version } from "react";
+import { ActivityIndicator, Alert, StyleSheet, FlatList } from "react-native";
+import React, { useEffect, version } from "react";
 import { ThemeText } from "@/components/StyledText";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MessageCard from "@/features/messages/components/MessageCard";
 import { router } from "expo-router";
-
-type Props = {};
+import useMessages from "@/features/messages/hooks/useMessages";
+import { useUser } from "@clerk/clerk-expo";
 
 const bgColor = "#FAF9FE"; // Default background color
-const MessagesScreen = (props: Props) => {
-  const index = 0; // Placeholder for index, can be used for dynamic content later
+const MessagesScreen = () => {
+  const { loading, error, fetchConversations, conversations } = useMessages();
+  const { user, isLoaded, isSignedIn } = useUser();
 
+  useEffect(() => {
+    if (!isLoaded || loading) return;
+    if (!isSignedIn) {
+      router.push("/");
+    }
+    if (user === null) {
+      console.error("User is null, cannot fetch conversations.");
+      return;
+    }
+    fetchConversations(user.id);
+  }, [isLoaded, user]);
+
+  useEffect(() => {
+    if (error) {
+      console.error("Error fetching messages:", error);
+      Alert.alert(error);
+    }
+  }, [error]);
+  if (loading) {
+    return (
+      <SafeAreaView
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+          backgroundColor: bgColor,
+        }}
+      >
+        <ActivityIndicator />
+      </SafeAreaView>
+    );
+  }
+  if (conversations.length === 0) {
+    return (
+      <SafeAreaView
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+          backgroundColor: bgColor,
+        }}
+      >
+        <ThemeText
+          style={{
+            fontSize: 20,
+            fontWeight: "bold",
+            padding: 20,
+          }}
+        >
+          No messages found.
+        </ThemeText>
+      </SafeAreaView>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       <ThemeText
@@ -23,13 +78,18 @@ const MessagesScreen = (props: Props) => {
       >
         Messages
       </ThemeText>
-      <MessageCard
-        onPress={() => {
-          router.push("/other/chat");
-        }}
-        creator="Wandile Kubheka"
-        message="Hey, I am interested in your proposal."
-        backgroundColor={index % 2 === 0 ? "#FFFFFF" : bgColor}
+      <FlatList
+        data={conversations}
+        renderItem={({ item, index }) => (
+          <MessageCard
+            onPress={() => {
+              router.push("/other/chat");
+            }}
+            creator={item.participants[1].displayName}
+            message={item.lastMessage}
+            backgroundColor={index % 2 === 0 ? "#FFFFFF" : bgColor}
+          />
+        )}
       />
     </SafeAreaView>
   );
