@@ -10,6 +10,8 @@ import useUserrStore from "@/store/useUserStore";
 import Colors from "@/constants/Colors";
 import ChatsHeader from "@/features/messages/components/ChatsHeader";
 import SendMessage from "@/features/messages/components/sendMessage";
+import { Message } from "@/features/messages/@types/messages";
+import ChatsDataRender from "@/features/messages/components/ChatsDataRender";
 
 type Props = {};
 
@@ -19,12 +21,51 @@ const ChatScreen = () => {
     collectionId,
     participants,
   }: { collectionId: string; participants: string } = useLocalSearchParams();
-  const { messages, fetchMessages } = useMessages();
-  useEffect(() => {
-    if (collectionId) {
-      fetchMessages(collectionId);
-    }
-  }, [collectionId]);
+  console.log(participants);
+
+  // const { messages, fetchMessages } = useMessages();
+  // useEffect(() => {
+  //   if (collectionId) {
+  //     fetchMessages(collectionId);
+  //   }
+  // }, [collectionId]);
+  const dummyMessages: Message[] = [
+    {
+      conversationId: "chat_001",
+      senderId: "user_2yJfJjLBcmu9ib1Dg433fY9oFYh",
+      content: "Hey! How are you doing?",
+      timestamp: new Date("2025-06-14T08:30:00Z"),
+      isRead: true,
+    },
+    {
+      conversationId: "chat_001",
+      senderId: "user_2yRyOpzjhjh3sahlEzMZK6D5Lp1",
+      content: "I'm good, thanks! What about you?",
+      timestamp: new Date("2025-06-14T08:31:30Z"),
+      isRead: true,
+    },
+    {
+      conversationId: "chat_001",
+      senderId: "user_2yJfJjLBcmu9ib1Dg433fY9oFYh",
+      content: "I'm doing great! Working on a new project.",
+      timestamp: new Date("2025-06-14T08:33:00Z"),
+      isRead: true,
+    },
+    {
+      conversationId: "chat_001",
+      senderId: "user_2yRyOpzjhjh3sahlEzMZK6D5Lp1",
+      content: "Nice! What's it about?",
+      timestamp: new Date("2025-06-14T08:34:15Z"),
+      isRead: false,
+    },
+    {
+      conversationId: "chat_001",
+      senderId: "user_2yJfJjLBcmu9ib1Dg433fY9oFYh",
+      content: "It's a chat app, actually 😄",
+      timestamp: new Date("2025-06-14T08:35:45Z"),
+      isRead: false,
+    },
+  ];
   // if for some reason other users returns more that 1 user
   const otherUser: UserModel = JSON.parse(participants).filter(
     (participant: UserModel) => participant.uid !== user?.uid
@@ -50,7 +91,7 @@ const ChatScreen = () => {
       </TouchableOpacity>
       <ChatsHeader otherUser={otherUser} />
       <View style={styles.chatsContainer}>
-        <Text>Chat messages will appear here</Text>
+        <ChatsDataRender myUserId={user!.uid} messages={dummyMessages} />
       </View>
       <SendMessage
         onSend={function (): void {
