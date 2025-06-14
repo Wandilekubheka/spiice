@@ -25,8 +25,8 @@ const ChatsDataRender = ({ messages, myUserId }: Props) => {
               message.senderId === myUserId ? "flex-end" : "flex-start",
           }}
         >
-          <Text style={{ color: "#333", fontSize: 16 }}>{message.content}</Text>
-          <Text style={{ color: "#999", fontSize: 12, marginTop: 5 }}>
+          <Text style={{ fontSize: 16 }}>{message.content}</Text>
+          <Text style={{ fontSize: 16, marginTop: 5 }}>
             {/* {new Date(message.timestamp).toLocaleTimeString()}/ */}
           </Text>
         </View>

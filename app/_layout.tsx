@@ -15,6 +15,7 @@ import { tokenCache } from "@clerk/clerk-expo/token-cache";
 import { getUserFromDatabase } from "@/features/auth/service/auth_service";
 import { Alert } from "react-native";
 import useUserrStore, { UserStoreType } from "@/store/useUserStore";
+import { emptyUser } from "@/@types/userModel";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -71,21 +72,19 @@ function RootLayoutNav() {
     if (!isLoaded) return;
 
     // Redirect to the home screen if the user is signed in
-    if (userId) {
-      router.navigate("/(app)/home");
+    updateGlobalStore(userId);
+  }, [isSignedIn, userId]);
 
-      updateGlobalStore()
-        .then(() => {
-          router.replace("/(app)/home");
-        })
-        .catch((error) => {
-          console.error("Error updating global store:", error);
-          Alert.alert(error);
-        });
+  useEffect(() => {
+    if (userContext.user !== emptyUser) {
+      router.push("/(app)/home");
+    } else {
+      // If the user is not signed in, redirect to the auth screen
+      router.push("/(auth)/login");
     }
-  }, [isSignedIn]);
+  }, [userContext.user]);
 
-  const updateGlobalStore = async () => {
+  const updateGlobalStore = async (userId: string | null) => {
     if (userId) {
       try {
         const appUser = await getUserFromDatabase(userId);

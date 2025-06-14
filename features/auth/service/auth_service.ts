@@ -25,6 +25,8 @@ const addUserToDatabase = async (user: UserModel) => {
 };
 
 const getUserFromDatabase = async (user_id: string) => {
+  console.log(user_id);
+
   try {
     // Get a reference to the document
     const docRef: DocumentReference<DocumentData, DocumentData> = doc(
@@ -44,6 +46,8 @@ const getUserFromDatabase = async (user_id: string) => {
       throw new Error(firestoreErrors["not-found"]);
     }
   } catch (e: any) {
+    console.log("Error getting user from database:", e);
+
     const message = firestoreErrors[e.code];
     throw new Error(message);
   }

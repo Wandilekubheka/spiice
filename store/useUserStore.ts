@@ -1,13 +1,14 @@
-import { UserModel } from "@/@types/userModel";
+import { emptyUser, UserModel } from "@/@types/userModel";
 import { create } from "zustand";
 export type UserStoreType = {
-  user: UserModel | null;
+  user: UserModel;
   setUser: (user: UserModel) => void;
   clearUser: () => void;
 };
+
 const useUserrStore = create<UserStoreType>((set) => ({
-  user: null as UserModel | null,
+  user: emptyUser,
   setUser: (user: UserModel) => set({ user }),
-  clearUser: () => set({ user: null }),
+  clearUser: () => set({ user: emptyUser }),
 }));
 export default useUserrStore;

@@ -1,6 +1,5 @@
-import { useAuth } from "@clerk/clerk-expo";
-import { EvilIcons, Ionicons } from "@expo/vector-icons";
-import { Slot, Stack, Tabs } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
 const AppLayout = () => {
   return (
     <Tabs

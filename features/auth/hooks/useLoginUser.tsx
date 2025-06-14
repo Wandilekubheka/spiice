@@ -15,8 +15,27 @@ const useLoginUser = () => {
     AuthStatus.unVerified
   );
   const { signIn, setActive, isLoaded } = useSignIn();
+  const { userId, isSignedIn } = useAuth();
   const [error, setError] = useState<null | string>(null);
   const [user, setUser] = useState<null | UserModel>(null);
+  useEffect(() => {
+    if (isSignedIn) {
+      // User is signed in, fetch user data
+      const fetchUserData = async () => {
+        try {
+          const _user = await getUserFromDatabase(userId);
+
+          setUser(_user);
+          setStatus(AuthStatus.Success);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          setError("Failed to fetch user data");
+          setStatus(AuthStatus.Error);
+        }
+      };
+      fetchUserData();
+    }
+  }, [isSignedIn, userId]);
 
   const onSignInPress = async ({ email, password }: Props) => {
     if (!isLoaded) return;
@@ -33,29 +52,13 @@ const useLoginUser = () => {
 
       // If sign-in process is complete, set the created session as active
       // and redirect the user
-      if (
-        signInAttempt.status === "complete" &&
-        signInAttempt.id != undefined
-      ) {
+      if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
-        const _user = await getUserFromDatabase(signInAttempt.id);
-        if (_user == null) {
-          setError("User not found in database");
-          setStatus(AuthStatus.Error);
-          return;
-        }
-        setUser(_user);
-        setStatus(AuthStatus.Success);
-      } else {
-        // If the status isn't complete, check why. User might need to
-        // complete further steps.
-        setError("An unknown error occured");
-        setStatus(AuthStatus.Error);
       }
     } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      const errorMessage = err?.errors?.[0]?.longMessage || "Unexpected error";
+      const errorMessage = err?.errors?.[0]?.longMessage || err;
       setError(errorMessage);
     } finally {
       setIsLoading(false);

@@ -17,14 +17,9 @@ import useUserrStore from "@/store/useUserStore";
 
 const HomeScreen = () => {
   const user = useUserrStore((state) => state.user);
-  const { error, userData, userProjects } = user?.uid
-    ? useUserStats(user.uid)
-    : { userData: null, error: null, userProjects: [] };
-  useEffect(() => {
-    if (user == null) {
-      router.replace("/(auth)/login");
-    }
-  }, [user]);
+
+  const { error, userData, userProjects } = useUserStats(user!.uid);
+
   useEffect(() => {
     if (error != null) {
       Alert.alert(error);
@@ -93,7 +88,7 @@ const HomeScreen = () => {
               </ThemeText>
             </TouchableOpacity>
           </View>
-          {userProjects?.length == 0 ? (
+          {userProjects && userProjects?.length == 0 ? (
             <ThemeText style={styles.noProjectText}>
               No active Projects
             </ThemeText>

@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeText } from "@/components/StyledText";
@@ -10,8 +10,8 @@ import useUserrStore from "@/store/useUserStore";
 
 const ProfileScreen = () => {
   const { signOut, isLoaded, isSignedIn } = useAuth();
-  const user = useUserrStore((state) => state.user);
-  const image = user?.photoURL || null;
+  const userContext = useUserrStore((state) => state);
+  const image = userContext?.user?.photoURL || null;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,8 +46,12 @@ const ProfileScreen = () => {
           </View>
         )}
         <View style={{ alignItems: "center", gap: 5 }}>
-          <ThemeText style={styles.profileText}>{user?.displayName}</ThemeText>
-          <ThemeText style={styles.profileText}>{user?.email}</ThemeText>
+          <ThemeText style={styles.profileText}>
+            {userContext.user?.displayName}
+          </ThemeText>
+          <ThemeText style={styles.profileText}>
+            {userContext.user?.email}
+          </ThemeText>
         </View>
       </View>
       <View>
@@ -84,8 +88,19 @@ const ProfileScreen = () => {
         />
         <CustomNavButtons
           onPress={() => {
-            if (isLoaded && isSignedIn) {
-              signOut();
+            if (isLoaded && isSignedIn && userContext.user) {
+              signOut()
+                .then(() => {
+                  userContext.clearUser();
+                })
+                .catch((error) => {
+                  console.error("Sign out error:", error);
+                });
+            } else {
+              Alert.alert(
+                "that's weird",
+                "You are not signed in... Please contact support if you think this is a mistake."
+              );
             }
           }}
           title="Sign out"

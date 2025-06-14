@@ -16,3 +16,18 @@ export interface UserModel {
   reviewCount: number;
   rating: number;
 }
+
+export const emptyUser: UserModel = {
+  uid: "",
+  displayName: "",
+  email: "",
+  createdAt: "",
+  totalGain: 0,
+  totalProject: 0,
+  totalRequests: 0,
+  totalReviews: 0,
+  desc: "",
+  jobTitle: "",
+  reviewCount: 0,
+  rating: 0,
+};
