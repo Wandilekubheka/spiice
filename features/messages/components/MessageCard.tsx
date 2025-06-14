@@ -39,7 +39,9 @@ const MessageCard = (props: Props) => {
         )}
         <View style={{ marginLeft: 10, gap: 5 }}>
           <Text style={styles.nameText}>{props.creator}</Text>
-          <Text style={styles.messageText}>{props.message}</Text>
+          <Text style={styles.messageText}>
+            {props.message.substring(0, 50)}...
+          </Text>
         </View>
       </View>
       <Ionicons

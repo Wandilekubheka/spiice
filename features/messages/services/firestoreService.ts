@@ -4,8 +4,9 @@ import {
   addDocToDatabse,
   getdocFromDatabase,
 } from "@/service/firestoreServices";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { UserModel } from "@/@types/userModel";
+import { use } from "react";
 
 const sendMessage = async (
   content: string,
@@ -58,17 +59,18 @@ const getConversationsList = async (userId: string) => {
     const docSnap = await getDocs(
       query(
         collection(db, "conversations"),
-        where("participants", "array-contains", userId)
+        where("participantsUid", "array-contains", userId)
       )
     );
-    let conversations: Conversation[] = [];
+    let conversations: { docId: string; value: Conversation }[] = [];
     if (docSnap.empty) {
       console.log("No conversations found for this user.");
       return conversations; // Return empty array if no conversations found
     }
     docSnap.forEach((doc) => {
       const conversationData = doc.data() as Conversation;
-      conversations.push(conversationData);
+
+      conversations.push({ docId: doc.id, value: conversationData });
     });
     return conversations;
   } catch (error) {
@@ -94,10 +96,12 @@ const createConversation = async (
       participants: participants,
       lastMessage: message,
       lastSender: "me",
+      participantsUid: [participants[0].uid, participants[1].uid], // Array of user IDs of the participants
     };
     const docid = await addDocToDatabse(newConversation, "conversations");
     messageData.conversationId = docid; // Set the conversation ID in the message
-    await addDocToDatabse(messageData, "messages", docid); // Add the message to the "messages" collection with the conversation ID
+    const messagesCollection = collection(db, "messages", docid, "messages");
+    await addDoc(messagesCollection, messageData);
     console.log("Conversation created successfully");
   } catch (error: any) {
     console.error("Error creating conversation:", error);

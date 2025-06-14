@@ -34,15 +34,21 @@ const SendProposal = () => {
   }, [error]);
 
   const createChatButton = async () => {
-    if (user == null) {
-      Alert.alert("You must be signed in to create a chat");
-      return;
-    } else {
+    try {
+      if (user == null) {
+        Alert.alert("You must be signed in to create a chat");
+        return;
+      }
+      await createChat(
+        [user.uid, proposal.creatorId],
+        `Proposal for ${proposal.title} let me know if you are interested!`
+      );
+      router.push({
+        pathname: "/(app)/messages",
+      });
+    } catch (error: any) {
+      Alert.alert(error);
     }
-    await createChat(
-      [user.uid, proposal.creatorId],
-      `Proposal for ${proposal.title} let me know if you are interested!`
-    );
   };
 
   return (

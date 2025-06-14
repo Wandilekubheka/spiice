@@ -12,7 +12,9 @@ const useMessages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversations, setConversations] = useState<
+    { docID: string; value: Conversation }[]
+  >([]);
   useEffect(() => {}, []);
   const fetchMessages = async (conversationId: string) => {
     setLoading(true);
@@ -67,7 +69,9 @@ const useMessages = () => {
     try {
       const data = await getConversationsList(userId);
       if (data && data.length > 0) {
-        setConversations(data);
+        setConversations(
+          data.map((item) => ({ docID: item.docId, value: item.value }))
+        );
       }
     } catch (err) {
       setError("Failed to load conversations");

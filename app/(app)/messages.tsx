@@ -65,10 +65,25 @@ const MessagesScreen = () => {
         renderItem={({ item, index }) => (
           <MessageCard
             onPress={() => {
-              router.push("/other/chat");
+              router.push({
+                pathname: "/other/chat",
+                params: {
+                  collectionId: item.docID,
+                  participants: JSON.stringify(item.value.participants),
+                },
+              });
             }}
-            creator={item.participants[1].displayName}
-            message={item.lastMessage}
+            creator={
+              user?.uid === item.value.participantsUid[0]
+                ? item.value.participants[1].displayName
+                : item.value.participants[0].displayName
+            }
+            message={item.value.lastMessage}
+            creatorAvatarurl={
+              user?.uid === item.value.participantsUid[0]
+                ? item.value.participants[1].photoURL
+                : item.value.participants[0].photoURL
+            }
             backgroundColor={index % 2 === 0 ? "#FFFFFF" : bgColor}
           />
         )}
