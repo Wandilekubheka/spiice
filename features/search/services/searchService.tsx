@@ -1,11 +1,10 @@
-import { UserModel } from "@/@types/userModel";
 import { db } from "@/firebase";
 import {
   addDoc,
   collection,
-  getDoc,
   getDocs,
   query,
+  Timestamp,
   where,
 } from "firebase/firestore";
 import { jobCard } from "../@types/jobCard";
@@ -23,7 +22,13 @@ const searchByName = async (name: string) => {
       return [];
     }
 
-    return docs.docs.map((doc) => doc.data() as jobCard);
+    return docs.docs.map((doc) => {
+      const docData = doc.data() as jobCard;
+      // Convert Firestore Timestamp to JS Date
+      const date = docData.postedDate as Timestamp;
+      docData.postedDate = date.toDate().toLocaleDateString();
+      return docData;
+    });
   } catch (error) {
     console.error("Error searching user by name:", error);
     throw new Error("an error occurred while searching for users");

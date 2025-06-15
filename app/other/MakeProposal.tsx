@@ -127,7 +127,7 @@ const MakeProposal = (props: Props) => {
               <Ionicons name="person" size={24} color="#FFFFFF" />
             </View>
           )}
-          <ThemeText style={styles.titleText}>Wandile Kubheka</ThemeText>
+          <ThemeText style={styles.titleText}>{user.displayName}</ThemeText>
         </View>
         <ThemeText style={styles.titleText}>Make a proposition</ThemeText>
         <TextInput

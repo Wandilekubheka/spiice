@@ -1,17 +1,10 @@
-import {
-  ActivityIndicator,
-  Alert,
-  StyleSheet,
-  FlatList,
-  View,
-} from "react-native";
-import React, { useEffect, version } from "react";
+import { ActivityIndicator, Alert, StyleSheet, FlatList } from "react-native";
+import React, { useEffect } from "react";
 import { ThemeText } from "@/components/StyledText";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MessageCard from "@/features/messages/components/MessageCard";
 import { router } from "expo-router";
 import useMessages from "@/features/messages/hooks/useMessages";
-import { useUser } from "@clerk/clerk-expo";
 import useUserrStore from "@/store/useUserStore";
 
 const bgColor = "#FAF9FE"; // Default background color

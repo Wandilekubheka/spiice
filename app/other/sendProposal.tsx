@@ -18,14 +18,17 @@ import { ThemeText } from "@/components/StyledText";
 import StyledButton from "@/components/styledButton";
 import { router } from "expo-router";
 import useMessages from "@/features/messages/hooks/useMessages";
-import { useUser } from "@clerk/clerk-expo";
 import useUserrStore from "@/store/useUserStore";
+import useUserStats from "@/features/home/hooks/useUserStats";
+import { projectType } from "@/@types/ProjectType";
+import { OfferStatus } from "@/features/@types/offerstatus";
 
 const SendProposal = () => {
   const { data }: { data: string } = useLocalSearchParams();
-  const { createChat, error } = useMessages();
+  const { createChat, error, sendMessage } = useMessages();
   const user = useUserrStore((state) => state.user);
   const proposal = JSON.parse(data).proposal as jobCard;
+  const { createActiveTask } = useUserStats(user.uid);
 
   useEffect(() => {
     if (error != null) {
@@ -39,10 +42,19 @@ const SendProposal = () => {
         Alert.alert("You must be signed in to create a chat");
         return;
       }
+
       await createChat(
         [user.uid, proposal.creatorId],
         `Proposal for ${proposal.title} let me know if you are interested!`
       );
+      const task: projectType = {
+        userID: user.uid,
+        title: proposal.title,
+        clientName: proposal.creator,
+        status: OfferStatus.PENDING,
+      };
+      createActiveTask(task);
+
       router.push({
         pathname: "/(app)/messages",
       });

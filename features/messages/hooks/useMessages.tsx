@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Conversation, Message } from "../@types/messages";
 import {
   createConversation,
@@ -12,6 +12,9 @@ const useMessages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedConversationID, setSelectedConversationID] = useState<
+    string | null
+  >(null);
   const [conversations, setConversations] = useState<
     { docID: string; value: Conversation }[]
   >([]);
@@ -34,6 +37,7 @@ const useMessages = () => {
       setLoading(false);
     }
   };
+  const getConversationsID = async (participants: string[]) => {};
 
   const createChat = async (participantsUID: string[], message: string) => {
     console.log("Creating chat with participants:", participantsUID);
