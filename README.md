@@ -76,7 +76,7 @@ SPICE/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/spice-app.git
+git clone https://github.com/Wandilekubheka/spice-app.git
 cd spice-app
 ```
 
