@@ -58,25 +58,33 @@ const getMessages = async (
     unsubscribe,
   };
 };
-const getConversationsList = async (userId: string) => {
+const getConversationsList = async (
+  userId: string,
+  setConversations: (
+    conversations: { docID: string; value: Conversation }[]
+  ) => void
+) => {
   try {
-    const docSnap = await getDocs(
-      query(
-        collection(db, "conversations"),
-        where("participantsUid", "array-contains", userId)
-      )
+    const q = query(
+      collection(db, "conversations"),
+      where("participantsUid", "array-contains", userId)
     );
-    let conversations: { docId: string; value: Conversation }[] = [];
-    if (docSnap.empty) {
-      console.log("No conversations found for this user.");
-      return conversations; // Return empty array if no conversations found
-    }
-    docSnap.forEach((doc) => {
-      const conversationData = doc.data() as Conversation;
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const conv: { docID: string; value: Conversation }[] = snapshot.docs.map(
+        (doc) => {
+          const docID = doc.id; // Get the document ID
+          const data = doc.data() as Conversation;
 
-      conversations.push({ docId: doc.id, value: conversationData });
+          return {
+            docID: docID,
+            value: data,
+          };
+        }
+      );
+      setConversations(conv);
     });
-    return conversations;
+
+    return { unsubscribe };
   } catch (error) {
     console.error("Error fetching conversations:", error);
     throw new Error("Failed to fetch conversations");

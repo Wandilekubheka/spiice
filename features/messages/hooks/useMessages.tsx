@@ -96,13 +96,12 @@ const useMessages = () => {
   const fetchConversations = async (userId: string) => {
     setLoading(true);
     try {
-      const data = await getConversationsList(userId);
-      if (data && data.length > 0) {
-        setConversations(
-          data.map((item) => ({ docID: item.docId, value: item.value }))
-        );
-      }
-    } catch (err) {
+      const { unsubscribe } = await getConversationsList(
+        userId,
+        setConversations
+      );
+      return () => unsubscribe();
+    } catch (err: any) {
       setError("Failed to load conversations");
     } finally {
       setLoading(false);

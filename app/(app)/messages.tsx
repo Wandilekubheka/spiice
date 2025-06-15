@@ -20,11 +20,6 @@ const MessagesScreen = () => {
   const user = useUserrStore((state) => state.user);
 
   useEffect(() => {
-    if (!user) {
-      router.push("/");
-      return;
-    }
-
     fetchConversations(user.uid);
   }, [user]);
 
