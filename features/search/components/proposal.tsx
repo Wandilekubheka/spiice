@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFFFFF",
     borderRadius: 8,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -97,6 +98,8 @@ const styles = StyleSheet.create({
     elevation: 13,
   },
   headerContainer: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     flexDirection: "row",
     alignItems: "center",
     gap: 10,

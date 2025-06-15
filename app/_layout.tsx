@@ -102,5 +102,12 @@ function RootLayoutNav() {
       }
     }
   };
-  return <Slot initialRouteName="(auth)" />;
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName="(auth)"
+    />
+  );
 }

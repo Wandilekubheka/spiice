@@ -4,8 +4,8 @@ import {
   createConversation,
   getConversationsList,
   getMessages,
+  sendMessage as sendMessageToFirestore,
 } from "../services/firestoreService";
-import { UserModel } from "@/@types/userModel";
 import { getUserFromDatabase } from "@/features/auth/service/auth_service";
 
 const useMessages = () => {
@@ -15,15 +15,19 @@ const useMessages = () => {
   const [conversations, setConversations] = useState<
     { docID: string; value: Conversation }[]
   >([]);
-  useEffect(() => {}, []);
   const fetchMessages = async (conversationId: string) => {
+    if (!conversationId) {
+      setError("Conversation ID is required");
+      return;
+    }
     setLoading(true);
     try {
-      await getMessages(conversationId).then((data) => {
-        if (data && data.length > 0) {
-          setMessages(data);
-        }
-      });
+      console.log("Fetching messages for conversation:", conversationId);
+
+      const { unsubscribe } = await getMessages(conversationId, setMessages);
+
+      // Unsubscribe from the listener when the component unmounts
+      return () => unsubscribe();
     } catch (err) {
       setError("Failed to load messages");
     } finally {
@@ -64,6 +68,31 @@ const useMessages = () => {
     }
   };
 
+  const sendMessage = async (
+    conversationId: string,
+    senderId: string,
+    content: string
+  ) => {
+    if (!conversationId || !senderId || !content) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const messageData: Message = {
+        conversationId,
+        senderId,
+        content,
+        timestamp: new Date(),
+        isRead: false,
+      };
+      await sendMessageToFirestore(messageData, conversationId);
+    } catch (err: any) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchConversations = async (userId: string) => {
     setLoading(true);
     try {
@@ -88,6 +117,7 @@ const useMessages = () => {
     fetchConversations,
     conversations,
     createChat,
+    sendMessage,
   };
 };
 

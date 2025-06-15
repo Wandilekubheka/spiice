@@ -2,7 +2,7 @@ import { View, Text, Alert, TextInput, Button, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import usePassReset from "@/features/auth/hooks/usePassReset";
 import { AuthStatus } from "@/@types/authStatus";
-import { router } from "expo-router";
+import { router, Stack } from "expo-router";
 import StylesInput from "@/components/StylesInput";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -31,6 +31,11 @@ const ForgotPassScreen = () => {
   if (showCodeModal) {
     return (
       <SafeAreaView style={styles.container}>
+        <Stack.Screen
+          options={{
+            headerShown: true,
+          }}
+        />
         <ThemeText
           style={{
             fontFamily: "RedHatDisplayBB",
@@ -87,6 +92,7 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     gap: 20,
+    backgroundColor: Colors.light.background,
   },
   form: {
     flex: 1,

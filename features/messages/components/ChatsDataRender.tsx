@@ -14,7 +14,8 @@ const ChatsDataRender = ({ messages, myUserId }: Props) => {
         <View
           key={index}
           style={{
-            padding: 10,
+            maxWidth: "80%",
+            paddingHorizontal: 10,
             backgroundColor:
               message.senderId === myUserId ? "#CABDFD" : "#9279FE",
             borderRadius: 8,
@@ -25,9 +26,18 @@ const ChatsDataRender = ({ messages, myUserId }: Props) => {
               message.senderId === myUserId ? "flex-end" : "flex-start",
           }}
         >
-          <Text style={{ fontSize: 16 }}>{message.content}</Text>
-          <Text style={{ fontSize: 16, marginTop: 5 }}>
-            {/* {new Date(message.timestamp).toLocaleTimeString()}/ */}
+          <Text style={{ fontSize: 16, color: "white", marginTop: 5 }}>
+            {message.content}
+          </Text>
+          <Text
+            style={{
+              fontSize: 10,
+              marginTop: 5,
+              color: "#f5f5f5",
+              textAlign: "right",
+            }}
+          >
+            {message.timestamp.toString()}
           </Text>
         </View>
       ))}

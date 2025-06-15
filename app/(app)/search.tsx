@@ -79,10 +79,10 @@ const SearchScreen = (props: Props) => {
         </ThemeText>
       </TouchableOpacity>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={searchResults}
         keyExtractor={(item) => item.title}
         renderItem={({ item }) => <Proposal {...item} />}
-        contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           <ThemeText style={{ textAlign: "center", marginTop: 20 }}>
             No results found

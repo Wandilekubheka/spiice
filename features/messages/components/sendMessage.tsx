@@ -6,6 +6,7 @@ import Colors from "@/constants/Colors";
 type Props = {
   onSend: () => void;
   textChange: (text: string) => void;
+  value?: string;
 };
 
 const SendMessage = (props: Props) => {
@@ -15,6 +16,7 @@ const SendMessage = (props: Props) => {
         placeholder="Type your message..."
         onChangeText={props.textChange}
         style={styles.input}
+        value={props.value}
       />
       <Ionicons
         name="send"

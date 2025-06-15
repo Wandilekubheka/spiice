@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 24,
     flexDirection: "row",
+    backgroundColor: "red",
   },
   leftContent: {
     flex: 1,

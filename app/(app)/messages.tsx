@@ -1,4 +1,10 @@
-import { ActivityIndicator, Alert, StyleSheet, FlatList } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  FlatList,
+  View,
+} from "react-native";
 import React, { useEffect, version } from "react";
 import { ThemeText } from "@/components/StyledText";
 import { SafeAreaView } from "react-native-safe-area-context";

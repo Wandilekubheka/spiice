@@ -6,7 +6,7 @@ import StylesInput from "@/components/StylesInput";
 import { ThemeText } from "@/components/StyledText";
 import Colors from "@/constants/Colors";
 import { AuthStatus } from "@/@types/authStatus";
-import { router } from "expo-router";
+import { router, Stack } from "expo-router";
 
 type Props = {
   action: (code: string) => Promise<void>;
@@ -32,6 +32,11 @@ const EntercodeScreen = ({ action, error, status }: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Stack.Screen
+        options={{
+          headerShown: true,
+        }}
+      />
       <View style={styles.form}>
         <ThemeText
           style={{
@@ -64,6 +69,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
+    backgroundColor: Colors.light.background,
   },
   form: {
     width: "100%",
